@@ -47,7 +47,7 @@ The temporary password must contain:
 ![Register](screenshots/register.PNG)
 
 ### 📧 Email Received
-![Email](screenshots/email.PNG)
+![Email](D:\Work\RegistrationEmail\screenshots\Email.PNG)
 
 ---
 
