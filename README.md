@@ -44,10 +44,10 @@ The temporary password must contain:
 ## 📸 Screenshots
 
 ### 📝 Registration Form
-![Register](screenshots/register.png)
+![Register](screenshots/register.PNG)
 
 ### 📧 Email Received
-![Email](screenshots/email.png)
+![Email](screenshots/email.PNG)
 
 ---
 
