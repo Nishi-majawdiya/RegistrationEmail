@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.IO;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using System.Collections.Generic;
+using System.Linq;
 
 public class AccountController : Controller
 {
@@ -11,27 +14,34 @@ public class AccountController : Controller
         _emailService = emailService;
     }
 
+    // GET: Register Page
     public IActionResult Register()
     {
         return View();
     }
 
+    // POST: Register
     [HttpPost]
     public async Task<IActionResult> Register(RegisterViewModel model, string submitType)
     {
         if (!ModelState.IsValid)
             return View(model);
 
-        if (!IsValidPassword(model.TemporaryPassword))
+        // 🔐 Password Validation with detailed errors
+        var passwordErrors = GetPasswordErrors(model.TemporaryPassword);
+
+        if (passwordErrors.Any())
         {
-            ModelState.AddModelError("", "Password does not meet requirements.");
+            ModelState.AddModelError("TemporaryPassword",
+                "Missing: " + string.Join(", ", passwordErrors));
             return View(model);
         }
 
         try
         {
-            string loginLink = "https://localhost:5001/account/login";
+            string loginLink = "https://localhost:7125/Account/Login";
 
+            // ✅ Normal Email
             if (submitType == "normal")
             {
                 string body = $@"
@@ -45,6 +55,7 @@ public class AccountController : Controller
 
                 await _emailService.SendEmailAsync(model.Email, "Registration", body);
             }
+            // ✅ Template Email
             else if (submitType == "template")
             {
                 var templatePath = Path.Combine(Directory.GetCurrentDirectory(),
@@ -61,19 +72,41 @@ public class AccountController : Controller
                 await _emailService.SendEmailAsync(model.Email, "Registration", html);
             }
 
-            ViewBag.Message = "Email sent successfully!";
+            ViewBag.Message = "✅ Email sent successfully!";
         }
         catch (Exception ex)
         {
-            ModelState.AddModelError("", "Error sending email: " + ex.Message);
+            ModelState.AddModelError("", "❌ Error sending email: " + ex.Message);
         }
 
         return View(model);
     }
 
-    private bool IsValidPassword(string password)
+    // 🔐 Password Validation Method
+    private List<string> GetPasswordErrors(string password)
     {
-        return System.Text.RegularExpressions.Regex.IsMatch(password,
-            @"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{10,}$");
+        var errors = new List<string>();
+
+        if (!Regex.IsMatch(password, @"[A-Z]"))
+            errors.Add("at least one uppercase letter");
+
+        if (!Regex.IsMatch(password, @"[a-z]"))
+            errors.Add("at least one lowercase letter");
+
+        if (!Regex.IsMatch(password, @"\d"))
+            errors.Add("at least one number");
+
+        if (!Regex.IsMatch(password, @"[^a-zA-Z0-9]"))
+            errors.Add("at least one special character");
+
+        if (password.Length < 10)
+            errors.Add("minimum 10 characters");
+
+        return errors;
+    }
+
+    public IActionResult Login()
+    {
+        return View();
     }
 }
