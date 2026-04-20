@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .email-container { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #eee; }
+        .header { background-color: #4CAF50; color: white; padding: 20px; text-align: center; }
+        .body { padding: 30px; line-height: 1.6; color: #333; }
+        .button { background-color: #4CAF50; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="email-container">
+        <div class="header">
+            <h1>Welcome, {{FirstName}} {{LastName}} !</h1>
+        </div>
+        <div class="body">
+            <p>Thank you for registering at our site. We're excited to have you on board.</p>
+            <p>To get started, please click the button below to verify your account:</p>
+            <p style="text-align: center;">
+                <a href="{{LoginLink}}" class="button">Verify My Account</a>
+            </p>
+            <p>If the button doesn't work, copy and paste this link into your browser:</p>
+            <p>{{LoginLink}}</p>
+        </div>
+    </div>
+</body>
+</html>

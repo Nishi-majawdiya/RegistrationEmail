@@ -1,0 +1,54 @@
+﻿@model RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<h2>Registration Form</h2>
+
+<form asp-action="Register" method="post">
+
+    <div>
+        <label>First Name</label>
+        <input asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" style="color:red"></span>
+    </div>
+
+    <div>
+        <label>Last Name</label>
+        <input asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" style="color:red"></span>
+    </div>
+
+    <div>
+        <label>Email</label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" style="color:red"></span>
+    </div>
+
+    <div>
+        <label>Temporary Password</label>
+        <input asp-for="TemporaryPassword" type="password" class="form-control" />
+        <span asp-validation-for="TemporaryPassword" style="color:red"></span>
+    </div>
+
+    <br />
+
+    <button type="submit" name="submitType" value="normal" class="btn btn-primary">
+        Register User
+    </button>
+
+    <button type="submit" name="submitType" value="template" class="btn btn-success">
+        Register via Template
+    </button>
+
+</form>
+
+@if (ViewBag.Message != null)
+{
+    <p style="color:green">@ViewBag.Message</p>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
